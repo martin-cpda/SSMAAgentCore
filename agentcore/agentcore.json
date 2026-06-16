@@ -15,7 +15,13 @@
       "codeLocation": "app/MyAgent/",
       "runtimeVersion": "PYTHON_3_14",
       "networkMode": "PUBLIC",
-      "protocol": "HTTP"
+      "protocol": "HTTP",
+      "envVars": [
+        {
+          "name": "KNOWLEDGE_BASE_ID",
+          "value": "HYBEDVYFY8"
+        }
+      ]
     }
   ],
   "memories": [
