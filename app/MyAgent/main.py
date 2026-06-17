@@ -5,6 +5,7 @@ from bedrock_agentcore.runtime import BedrockAgentCoreApp
 from model.load import load_model
 from mcp_client.client import get_streamable_http_mcp_client
 from memory.session import get_memory_session_manager
+from knowledge_base.retrieve import retrieve_ssma_docs
 
 app = BedrockAgentCoreApp()
 log = app.logger
@@ -13,20 +14,21 @@ log = app.logger
 mcp_clients = [get_streamable_http_mcp_client()]
 
 DEFAULT_SYSTEM_PROMPT = """
-You are a helpful assistant. Use tools when appropriate.
+Eres el asistente SSMA de Braskem Idesa. Respondes preguntas sobre seguridad,
+salud y medio ambiente apoyándote en la documentación corporativa.
 
+Usa la herramienta retrieve_ssma_docs para buscar en la base de conocimiento
+antes de responder cualquier pregunta sobre procedimientos, normas o documentos.
+Basa tus respuestas en la información recuperada y no inventes datos que no estén
+en los documentos. Si no encuentras información relevante, indícalo con claridad.
 """
 
 
 # Define a collection of tools used by the model
 tools = []
 
-# Define a simple function tool
-@tool
-def add_numbers(a: int, b: int) -> int:
-    """Return the sum of two numbers"""
-    return a+b
-tools.append(add_numbers)
+# Recuperación RAG sobre la Knowledge Base (S3 Vectors) desplegada por el IaC.
+tools.append(retrieve_ssma_docs)
 
 
 # Add MCP client to tools if available
